@@ -11,9 +11,9 @@ function IGImageRetrieve(lookup, isHashtag, response) {
   }
   var images = [];
   $.get(url, function(page) {
-    var re = /<script\b[^>]*>([\s\S]*?)<\/script>/gm;
+    var re = /<script\b[^>]*>([\s\S]*?)<\/script>/gm; // a regular expression isolate everything between <script> tags
     var match;
-    var matchString = "window._sharedData = ";
+    var matchString = "window._sharedData = "; // this is how I find the <script> tag that has all the image data
     var script;
     while (match = re.exec(page)) {
       if (match[1].substr(0,matchString.length) === matchString) {
@@ -22,12 +22,12 @@ function IGImageRetrieve(lookup, isHashtag, response) {
     }
     var data = JSON.parse(script);
     var rawImages;
-    console.log(data.entry_data.ProfilePage[0].graphql.user.edge_owner_to_timeline_media);
-    if (isHashtag === true) {
+    if (isHashtag === true) { // the images are stored in a slightly different place depending on whether we're looking at a hashtag or a user page.
       rawImages = data.entry_data.TagPage[0].graphql.hashtag.edge_hashtag_to_media.edges;
     } else {
       rawImages = data.entry_data.ProfilePage[0].graphql.user.edge_owner_to_timeline_media.edges;
     }
+    // return a cleaner object of images with only the information that counts
     for (var i in rawImages) {
       images.push({
         url: rawImages[i].node.display_url,
@@ -37,7 +37,6 @@ function IGImageRetrieve(lookup, isHashtag, response) {
         owner: rawImages[i].node.owner.id
       });
     }
-  response(images);
-});
-  
+   response(images);
+  });
 }

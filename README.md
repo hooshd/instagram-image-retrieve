@@ -10,7 +10,7 @@ Why I made this: when Instagram closed its API in June 2016, I had to sunset som
 
 This function retrieves the URLs of the images and returns them (along with other metadata).
 
-##Usage
+## Usage
 
 To retrieve images for the account 'shesatrailblazer':
 
